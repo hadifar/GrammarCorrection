@@ -1,35 +1,20 @@
 # -*- coding: utf-8 -*-
-#
-# Copyright 2018 Amir Hadifar. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ==============================================================================
+# !/usr/bin/env python
 
+from __future__ import unicode_literals
 
 import random
-import sys
 
 import nltk
 from pattern.en import pluralize, singularize, lexeme
 
-if len(sys.argv) != 4:
-    print "[USAGE] %s prepfile output_src output_tgt" % sys.argv[0]
-    sys.exit()
-
-input_path = sys.argv[1]
-output_src_path = sys.argv[2]
-output_tgt_path = sys.argv[3]
-
+# if len(sys.argv) != 4:
+#     print "[USAGE] %s prepfile output_src output_tgt" % sys.argv[0]
+#     sys.exit()
+#
+# input_path = sys.argv[1]
+# output_src_path = sys.argv[2]
+# output_tgt_path = sys.argv[3]
 
 DROPOUT_TOKENS = {"a", "an", "the", "'ll", "'s", "'m", "'ve"}
 
@@ -71,34 +56,68 @@ def pair_generator(x):
     x_split = nltk.word_tokenize(x)
     x_pos = nltk.pos_tag(x_split)
 
+    # avoid too much error creation
+    replace_flag = False
+    plural_flag = False
+    tense_flag = False
+    modal_flag = False
+
     for token, pos in x_pos:
 
         dropout_token = (token in DROPOUT_TOKENS and
                          random.random() < 0.25)
 
         replace_token = (token in REPLACEMENTS and
-                         random.random() < 0.25)
+                         random.random() < 0.25 and
+                         not replace_flag)
 
         pos_plural_token = (pos in NOUN_TAGS and
-                            random.random() < 0.25)
+                            random.random() < 0.25 and
+                            not plural_flag)
 
         pos_tense_token = (pos in VERBS_TAGS and
-                           random.random() < 0.25)
+                           random.random() < 0.25 and
+                           not tense_flag)
 
         pos_modal_token = (pos in MODAL and
-                           random.random() < 0.25)
+                           random.random() < 0.25 and
+                           not modal_flag)
 
         if replace_token:
             target.append(REPLACEMENTS[token])
+            replace_flag = True
         elif pos_plural_token:
             token = change_pluralization(token)
             target.append(token)
+            plural_flag = True
         elif pos_tense_token:
             token = change_tense(token)
             target.append(token)
+            tense_flag = True
         elif not dropout_token:
             target.append(token)
         elif pos_modal_token:
             target.append(MODAL[token])
+            modal_flag = True
 
     return " ".join(x_split), " ".join(target)
+
+
+with open('/Users/mac/PycharmProjects/riminder/data/clean-train/clean-train.tok.src', 'r') as srcfile, \
+        open('/Users/mac/PycharmProjects/riminder/data/clean-train/clean-train.tok.trg', 'r') as trgfile, \
+        open('/Users/mac/PycharmProjects/riminder/data/final-train/final-train.tok.src', 'w') as src_outfile, \
+        open('/Users/mac/PycharmProjects/riminder/data/final-train/final-train.tok.trg', 'w') as trg_outfile:
+    all_src = srcfile.readlines()
+    all_trg = trgfile.readlines()
+
+    assert len(all_src) == len(all_trg)
+
+    for src_line, trg_line in zip(all_src, all_trg):
+
+        src_line_gen, trg_line_gen = pair_generator(src_line)
+        src_outfile.write(src_line_gen + '\n')
+        trg_outfile.write(trg_line_gen + '\n')
+
+        if src_line != trg_line:  # if already have error, keep original error as well
+            src_outfile.write(src_line)
+            trg_outfile.write(trg_line)

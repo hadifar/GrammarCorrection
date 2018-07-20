@@ -27,6 +27,7 @@ $LANG8_SCRIPTS/convert_to_parallel.py   $ROOT_DIR/data/entries.train \
                                      $ROOT_DIR/data/lang-8/lang-8.tok.src \
                                      $ROOT_DIR/data/lang-8/lang-8.tok.trg
 
+
 # concatenated training data.
 mkdir -p $ROOT_DIR/data/concat-train
 cat $ROOT_DIR/data/nucle/nucle-train.tok.src $ROOT_DIR/data/lang-8/lang-8.tok.src > $ROOT_DIR/data/concat-train/concat-train.tok.src
@@ -38,3 +39,6 @@ $CLEAN_SCRIPTS/clean_data.py    $ROOT_DIR/data/concat-train/concat-train.tok.src
                             $ROOT_DIR/data/concat-train/concat-train.tok.trg \
                             $ROOT_DIR/data/clean-train/clean-train.tok.src \
                             $ROOT_DIR/data/clean-train/clean-train.tok.trg
+
+
+mkdir -p $ROOT_DIR/data/final-train
