@@ -39,7 +39,7 @@ with open(input_path_src, 'r') as srcfile, \
         src_line = nltk.word_tokenize(src_line)
         trg_line = nltk.word_tokenize(trg_line)
 
-        src_line = [x for x in src_line if not fullmatch('[' + string.punctuation + ']+', x)]
+        src_line = [x for x in src_line if not fullmatch('[' + string.punctuation + ']+', x)]  # remove punctuation
         trg_line = [x for x in trg_line if not fullmatch('[' + string.punctuation + ']+', x)]
 
         src_line = " ".join(src_line)
