@@ -2,6 +2,7 @@ nltk
 pattern
 h5py
 numpy
+tensorflow
 keras
 
 
