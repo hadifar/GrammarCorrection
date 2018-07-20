@@ -12,7 +12,7 @@ from utils import getSentencesMat, Vocabulary
 parser = argparse.ArgumentParser()
 parser.add_argument('--text_A', type=str, help='corpus with typo (target)')
 parser.add_argument('--text_B', type=str, help='corpus without typo (source)')
-parser.add_argument('--out_file', type=str, default="./data/src_trg_prepared.h5", help='Output HDF5 file name')
+parser.add_argument('--out_file', type=str, default="./data/trg_src_prepped.h5", help='Output HDF5 file name')
 args = parser.parse_args()
 
 target_typo_sents = (open(args.text_A).read()).split("\n")[:-1]

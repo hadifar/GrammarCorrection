@@ -12,7 +12,7 @@ import model
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--dataset', type=str, default="./data/src_trg_prepared.h5",
+parser.add_argument('--dataset', type=str, default="./data/trg_src_prepped.h5",
                     help='Path to HDF5 file')
 
 parser.add_argument('--weights_path', type=str, default="./weights/KerasAttentionNMT.h5",
