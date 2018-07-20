@@ -42,3 +42,4 @@ $CLEAN_SCRIPTS/clean_data.py    $ROOT_DIR/data/concat-train/concat-train.tok.src
 
 
 mkdir -p $ROOT_DIR/data/final-train
+# todo: add generate typo here

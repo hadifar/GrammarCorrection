@@ -1,2 +1,6 @@
 nltk
 pattern
+h5py
+numpy
+keras
+
