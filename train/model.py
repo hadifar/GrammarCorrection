@@ -89,7 +89,7 @@ class AttentionDecoder(Layer):
         return input_shape[0][0], input_shape[0][1], self.output_dim
 
 
-def getModel(enc_seq_length=35, enc_vocab_size=40005, dec_seq_length=35, dec_vocab_size=40005):
+def getModel(enc_seq_length, enc_vocab_size, dec_seq_length, dec_vocab_size):
     inp = Input((enc_seq_length,))
 
     imp_x = Embedding(enc_vocab_size, 150)(inp)

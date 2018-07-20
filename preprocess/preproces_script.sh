@@ -3,7 +3,9 @@
 set -e
 set -x
 
-ROOT_DIR=/Users/mac/PycharmProjects/riminder/
+source ../paths.sh
+
+ROOT_DIR=$BASE_DIR
 
 
 # path to scripts directories
