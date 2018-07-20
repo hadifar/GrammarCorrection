@@ -5,6 +5,7 @@ import argparse
 import json
 
 import h5py
+import config
 
 from utils import getSentencesMat, Vocabulary
 
@@ -26,18 +27,18 @@ for trg in target_typo_sents:
 for src in source_wo_sents:
     source_vocab.add_words(src.split(' '))
 
-target_vocab.keepTopK(40000)
-source_vocab.keepTopK(40000)
+target_vocab.keepTopK(config.MAX_KEEP_WORD)
+source_vocab.keepTopK(config.MAX_KEEP_WORD)
 
 target_sent_mat = getSentencesMat(target_typo_sents, target_vocab,
                                   startEndTokens=True,
                                   tokenizer_fn=lambda x: x.split(' '),
-                                  maxSentenceL=100)
+                                  maxSentenceL=config.MAX_SENT_LEN)
 
 source_sent_mat = getSentencesMat(source_wo_sents, source_vocab,
                                   startEndTokens=True,
                                   tokenizer_fn=lambda x: x.split(' '),
-                                  maxSentenceL=100)
+                                  maxSentenceL=config.MAX_SENT_LEN)
 
 f = h5py.File(args.out_file, "w")
 

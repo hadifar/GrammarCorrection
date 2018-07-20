@@ -7,19 +7,25 @@ import json
 import h5py
 import numpy as np
 
+import config
 import model
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default="./data/src_trg_prepared.h5",
-                    help='Path to HDF5 file created in prepared_data')
+                    help='Path to HDF5 file')
 
-parser.add_argument('--weights_path', type=str, default="./weights/KerasAttentionNMT_1.h5",
+parser.add_argument('--weights_path', type=str, default="./weights/KerasAttentionNMT.h5",
                     help='Path to Weights checkpoint')
 
 args = parser.parse_args()
 
 hf = h5py.File(args.dataset, 'r')
-m = model.getModel()
+
+m = model.getModel(enc_seq_length=config.MAX_SEQ_LEN,
+                   enc_vocab_size=config.MAX_VOCAB_SIZE,
+                   dec_seq_length=config.MAX_SEQ_LEN,
+                   dec_vocab_size=config.MAX_VOCAB_SIZE)
+
 m.load_weights(args.weights_path)
 
 target_vocab = json.loads(hf['target_vocab'].value)
@@ -40,12 +46,13 @@ def predict(sent):
 
     ret = ""
 
-    m_input = [np.zeros((1, 35)), np.zeros((1, 35))]
+    m_input = [np.zeros((1, config.MAX_SEQ_LEN)), np.zeros((1, config.MAX_SEQ_LEN))]
+
     for i, w in enumerate(words):
         m_input[0][0, i] = w
     m_input[1][0, 0] = source_vocab['word2idx']['<start>']
 
-    for w_i in range(1, 35):
+    for w_i in range(1, config.MAX_SEQ_LEN):
         out = m.predict(m_input)
         out_w_i = out[0][w_i - 1].argmax()
 
@@ -59,7 +66,7 @@ def predict(sent):
 
 
 while True:
-    print "Enter a sentence : "
+    print "Enter a sentence to correct typo: "
     sent = raw_input()
     print predict(sent).encode('utf-8')
 

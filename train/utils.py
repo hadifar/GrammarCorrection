@@ -3,30 +3,11 @@
 
 import json
 
+import nltk
 import numpy as np
 
-# from nltk.tokenize import word_tokenize
 
-# def tokenise( line ):
-# 	return word_tokenize(str(line).lower())
-nlp = None
-
-
-def get_nlp():
-    global nlp
-    if nlp is None:
-        import spacy  # See "Installing spaCy"
-        nlp = spacy.load('en')  # You are here.
-
-
-def spacy_tokenize(line):
-    get_nlp()
-    doc = nlp(line)
-    p = [str(d).lower() for d in doc]
-    return p
-
-
-def tokenise(line, tokenizer_fn=spacy_tokenize, startEndTokens=False):
+def tokenise(line, tokenizer_fn=nltk.word_tokenize, startEndTokens=False):
     p = tokenizer_fn(line)
     if startEndTokens:
         p = ['<start>'] + p + ['<end>']
@@ -57,10 +38,10 @@ class Vocabulary(object):
         for w in words:
             self.add_word(w)
 
-    def add_sentence(self, sentence):
-        words = tokenise(sentence)
-        for w in words:
-            self.add_word(w)
+    # def add_sentence(self, sentence):
+    #     words = tokenise(sentence)
+    #     for w in words:
+    #         self.add_word(w)
 
     def keepTopK(self, k):
         wordFreqs = self.wordFreqs.items()
@@ -99,7 +80,7 @@ class Vocabulary(object):
 
 def getSentencesMat(sentences, vocab, maxSentenceL=None,
                     padding='right', startEndTokens=False,
-                    tokenizer_fn=spacy_tokenize):
+                    tokenizer_fn=nltk.word_tokenize):
     tokenised = [tokenise(s, startEndTokens=startEndTokens, tokenizer_fn=tokenizer_fn) for s in sentences]
 
     if maxSentenceL is None:

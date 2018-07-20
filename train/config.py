@@ -1,0 +1,11 @@
+# #!/usr/bin/env python
+# # -*- coding: utf-8 -*-
+
+MAX_SEQ_LEN = 35
+MAX_SENT_LEN = 100
+MAX_KEEP_WORD = 40000
+MAX_VOCAB_SIZE = 40005
+
+BATCH_SIZE = 64
+EPOCH_NUM = 100
+STEPS_PER_EPOCH = 1000

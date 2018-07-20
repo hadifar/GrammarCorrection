@@ -4,17 +4,19 @@
 from __future__ import unicode_literals
 
 import random
+import sys
 
 import nltk
 from pattern.en import pluralize, singularize, lexeme
 
-# if len(sys.argv) != 4:
-#     print "[USAGE] %s prepfile output_src output_tgt" % sys.argv[0]
-#     sys.exit()
-#
-# input_path = sys.argv[1]
-# output_src_path = sys.argv[2]
-# output_tgt_path = sys.argv[3]
+if len(sys.argv) != 5:
+    print "[USAGE] %s input_src input_trg output_src output_trg" % sys.argv[0]
+    sys.exit()
+
+input_path_src = sys.argv[1]
+input_path_trg = sys.argv[2]
+output_path_src = sys.argv[3]
+output_path_trg = sys.argv[4]
 
 DROPOUT_TOKENS = {"a", "an", "the", "'ll", "'s", "'m", "'ve"}
 
@@ -103,10 +105,8 @@ def pair_generator(x):
     return " ".join(x_split), " ".join(target)
 
 
-with open('/Users/mac/PycharmProjects/riminder/data/clean-train/clean-train.tok.src', 'r') as srcfile, \
-        open('/Users/mac/PycharmProjects/riminder/data/clean-train/clean-train.tok.trg', 'r') as trgfile, \
-        open('/Users/mac/PycharmProjects/riminder/data/final-train/final-train.tok.src', 'w') as src_outfile, \
-        open('/Users/mac/PycharmProjects/riminder/data/final-train/final-train.tok.trg', 'w') as trg_outfile:
+with open(input_path_src, 'r') as srcfile, open(input_path_trg, 'r') as trgfile, \
+        open(output_path_src, 'w') as src_outfile, open(output_path_trg, 'w') as trg_outfile:
     all_src = srcfile.readlines()
     all_trg = trgfile.readlines()
 
@@ -121,3 +121,8 @@ with open('/Users/mac/PycharmProjects/riminder/data/clean-train/clean-train.tok.
         if src_line != trg_line:  # if already have error, keep original error as well
             src_outfile.write(src_line)
             trg_outfile.write(trg_line)
+
+# with open('/Users/mac/PycharmProjects/riminder/data/clean-train/clean-train.tok.src', 'r') as srcfile, \
+#         open('/Users/mac/PycharmProjects/riminder/data/clean-train/clean-train.tok.trg', 'r') as trgfile, \
+#         open('/Users/mac/PycharmProjects/riminder/data/final-train/final-train.tok.src', 'w') as src_outfile, \
+#         open('/Users/mac/PycharmProjects/riminder/data/final-train/final-train.tok.trg', 'w') as trg_outfile:

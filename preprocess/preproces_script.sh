@@ -10,6 +10,7 @@ ROOT_DIR=/Users/mac/PycharmProjects/riminder/
 M2_SCRIPTS=$ROOT_DIR/preprocess/nucle
 LANG8_SCRIPTS=$ROOT_DIR/preprocess/lang8
 CLEAN_SCRIPTS=$ROOT_DIR/preprocess/
+TYPO_SCRIPTS=$ROOT_DIR/preprocess/
 
 chmod u+x $LANG8_SCRIPTS/convert_to_parallel.py
 chmod u+x $M2_SCRIPTS/convert_m2_to_parallel.py
@@ -33,7 +34,7 @@ mkdir -p $ROOT_DIR/data/concat-train
 cat $ROOT_DIR/data/nucle/nucle-train.tok.src $ROOT_DIR/data/lang-8/lang-8.tok.src > $ROOT_DIR/data/concat-train/concat-train.tok.src
 cat $ROOT_DIR/data/nucle/nucle-train.tok.trg $ROOT_DIR/data/lang-8/lang-8.tok.trg > $ROOT_DIR/data/concat-train/concat-train.tok.trg
 
-
+# clean data
 mkdir -p $ROOT_DIR/data/clean-train
 $CLEAN_SCRIPTS/clean_data.py    $ROOT_DIR/data/concat-train/concat-train.tok.src \
                             $ROOT_DIR/data/concat-train/concat-train.tok.trg \
@@ -41,5 +42,10 @@ $CLEAN_SCRIPTS/clean_data.py    $ROOT_DIR/data/concat-train/concat-train.tok.src
                             $ROOT_DIR/data/clean-train/clean-train.tok.trg
 
 
+# generate typo
 mkdir -p $ROOT_DIR/data/final-train
-# todo: add generate typo here
+$TYPO_SCRIPTS/typo_generator.py     $ROOT_DIR/data/clean-train/clean-train.tok.src \
+                                $ROOT_DIR/data/clean-train/clean-train.tok.trg \
+                                $ROOT_DIR/data/final-train/final-train.tok.src \
+                                $ROOT_DIR/data/final-train/final-train.tok.trg
+
