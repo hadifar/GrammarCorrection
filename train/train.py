@@ -46,7 +46,7 @@ m = model.getModel(enc_seq_length=config.MAX_SEQ_LEN,
                    dec_vocab_size=config.MAX_VOCAB_SIZE)
 
 for ep in range(config.EPOCH_NUM):
-    print "Epoch", ep
+    print ("Epoch", ep)
     m.fit_generator(tr_gen, steps_per_epoch=config.STEPS_PER_EPOCH)
     m.save_weights(args.weights_path + "." + str(ep))
     m.save_weights(args.weights_path)
