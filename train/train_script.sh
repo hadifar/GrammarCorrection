@@ -7,7 +7,6 @@ source ../paths.sh
 
 ROOT_DIR=$BASE_DIR
 
-ROOT_DIR=/Users/mac/PycharmProjects/riminder/
 chmod u+x $ROOT_DIR/train/prepare_data.py
 chmod u+x $ROOT_DIR/train/train.py
 chmod u+x $ROOT_DIR/train/predict.py
