@@ -77,8 +77,8 @@ def getSentencesMat(filePath, vocab, maxSentenceL=None,
                     padding='right', startEndTokens=False,
                     tokenizer_fn=nltk.word_tokenize):
     with open(filePath) as inputfile:
-        tokenised = []
 
+        tokenised = []
         file_size = 0
         for s in inputfile:
             file_size = file_size + 1
@@ -101,5 +101,6 @@ def getSentencesMat(filePath, vocab, maxSentenceL=None,
                     ids = ids + [0] * (maxSentenceL - len(ids))
                 else:
                     ids = [0] * (maxSentenceL - len(ids)) + ids
+
             sentencesMat[i] = np.array(ids)
         return sentencesMat

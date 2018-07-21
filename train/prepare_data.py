@@ -15,8 +15,6 @@ parser.add_argument('--text_B', type=str, help='corpus without typo (source)')
 parser.add_argument('--out_file', type=str, default="./data/trg_src_prepped.h5", help='Output HDF5 file name')
 args = parser.parse_args()
 
-print('revision file...')
-
 target_vocab = Vocabulary()
 source_vocab = Vocabulary()
 

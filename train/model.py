@@ -24,7 +24,7 @@ class AttentionDecoder(Layer):
             rnn_inp = K.concatenate((inputs, ctx_vec), axis=1)
             return self.rnn_cell.call(rnn_inp, states)
 
-        timesteps = inputs.shape[1]
+        timesteps = K.int_shape(inputs)[1]
 
         initial_state = self.get_initial_state(inputs)
 
@@ -90,18 +90,28 @@ class AttentionDecoder(Layer):
 
 
 def getModel(enc_seq_length, enc_vocab_size, dec_seq_length, dec_vocab_size):
-    inp = Input((enc_seq_length,))
+    """
+    According to the "Massive Exploration of Neural Machine Translation Architectures"
+    best params for NMT models (seq2seq framework) are
+    encoder/decoder depths are size of 4, embedding size 512, attention dim 512
+    I use a simple model that can achieve good performance at the same time.
+    """
 
+    inp = Input((enc_seq_length,))
     imp_x = Embedding(enc_vocab_size, 150)(inp)
-    ctxmat = Bidirectional(LSTM(256, return_sequences=True))(imp_x)
+    ctxmat0 = Bidirectional(LSTM(256, return_sequences=True))(imp_x)
+    ctxmat1 = Bidirectional(LSTM(256, return_sequences=True))(ctxmat0)
 
     inp_cond = Input((dec_seq_length,))
     inp_cond_x = Embedding(dec_vocab_size, 150)(inp_cond)
+    inp_cxt = Bidirectional(LSTM(256, return_sequences=True))(inp_cond_x)
 
-    decoded = AttentionDecoder(LSTMCell(256))([inp_cond_x, ctxmat])
+    decoded = AttentionDecoder(LSTMCell(256))([inp_cxt, ctxmat1])
+
     decoded = TimeDistributed(Dense(dec_vocab_size, activation='softmax'))(decoded)
 
     model = Model([inp, inp_cond], decoded)
     model.compile('adam', 'categorical_crossentropy')
+    print(model.summary())
 
     return model

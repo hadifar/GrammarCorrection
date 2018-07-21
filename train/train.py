@@ -34,8 +34,8 @@ def load_data(batchSize=config.BATCH_SIZE):
     while True:
         for i in range(0, len(tr_data) - batchSize, batchSize):
             inds = tr_data[i: i + batchSize]
-            yield [inp_x[inds], inp_cond_x[inds]], \
-                  keras.utils.to_categorical(out_y[inds], num_classes=config.MAX_VOCAB_SIZE)
+            yield [inp_x[inds], inp_cond_x[inds]], keras.utils.to_categorical(out_y[inds],
+                                                                              num_classes=config.MAX_VOCAB_SIZE)
 
 
 tr_gen = load_data(batchSize=config.BATCH_SIZE)
