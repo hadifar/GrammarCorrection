@@ -51,4 +51,4 @@ for ep in range(config.EPOCH_NUM):
     m.save_weights(args.weights_path + "." + str(ep))
     m.save_weights(args.weights_path)
 
-print "Training is finished"
+print ("Training is finished")

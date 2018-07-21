@@ -10,7 +10,7 @@ import nltk
 from pattern.en import pluralize, singularize, lexeme
 
 if len(sys.argv) != 5:
-    print "[USAGE] %s input_src input_trg output_src output_trg" % sys.argv[0]
+    print ("[USAGE] %s input_src input_trg output_src output_trg" % sys.argv[0])
     sys.exit()
 
 input_path_src = sys.argv[1]
