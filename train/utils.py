@@ -38,11 +38,6 @@ class Vocabulary(object):
         for w in words:
             self.add_word(w)
 
-    # def add_sentence(self, sentence):
-    #     words = tokenise(sentence)
-    #     for w in words:
-    #         self.add_word(w)
-
     def keepTopK(self, k):
         wordFreqs = self.wordFreqs.items()
         wordFreqs = sorted(wordFreqs, key=lambda x: x[1], reverse=True)
@@ -78,25 +73,33 @@ class Vocabulary(object):
         open(fname_prefix + "everything.json", "wb").write(json.dumps(J))
 
 
-def getSentencesMat(sentences, vocab, maxSentenceL=None,
+def getSentencesMat(filePath, vocab, maxSentenceL=None,
                     padding='right', startEndTokens=False,
                     tokenizer_fn=nltk.word_tokenize):
-    tokenised = [tokenise(s, startEndTokens=startEndTokens, tokenizer_fn=tokenizer_fn) for s in sentences]
+    with open(filePath) as inputfile:
+        tokenised = []
 
-    if maxSentenceL is None:
-        maxSentenceL = max([len(s) for s in tokenised])
-    sentencesMat = np.zeros((len(sentences), maxSentenceL)).astype('int64')
-    for i, sen in enumerate(tokenised):
-        ids = [vocab(w) for w in sen]
-        if padding == 'right':
-            ids = ids[:maxSentenceL]
-        else:
-            ids = ids[-1 * maxSentenceL:]
+        file_size = 0
+        for s in inputfile:
+            file_size = file_size + 1
+            tokenised.append(tokenise(s.rstrip('\n'), startEndTokens=startEndTokens, tokenizer_fn=tokenizer_fn))
 
-        if len(ids) < maxSentenceL:
+        if maxSentenceL is None:
+            maxSentenceL = max([len(s) for s in tokenised])
+
+        sentencesMat = np.zeros((file_size, maxSentenceL)).astype('int64')
+
+        for i, sen in enumerate(tokenised):
+            ids = [vocab(w) for w in sen]
             if padding == 'right':
-                ids = ids + [0] * (maxSentenceL - len(ids))
+                ids = ids[:maxSentenceL]
             else:
-                ids = [0] * (maxSentenceL - len(ids)) + ids
-        sentencesMat[i] = np.array(ids)
-    return sentencesMat
+                ids = ids[-1 * maxSentenceL:]
+
+            if len(ids) < maxSentenceL:
+                if padding == 'right':
+                    ids = ids + [0] * (maxSentenceL - len(ids))
+                else:
+                    ids = [0] * (maxSentenceL - len(ids)) + ids
+            sentencesMat[i] = np.array(ids)
+        return sentencesMat
