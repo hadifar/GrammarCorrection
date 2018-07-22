@@ -1,15 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
+import argparse
 
-if len(sys.argv) != 4:
-    print ("[USAGE] %s nucle_m2_file output_src output_tgt" % sys.argv[0])
-    sys.exit()
+parser = argparse.ArgumentParser()
+parser.add_argument('--input_path', type=str,
+                    help='input clean source')
+parser.add_argument('--output_src', type=str,
+                    help='input clean source')
+parser.add_argument('--output_trg', type=str,
+                    help='input clean target')
 
-input_path = sys.argv[1]
-output_src_path = sys.argv[2]
-output_tgt_path = sys.argv[3]
+args = parser.parse_args()
+
+input_path = args.input_src
+output_src_path = args.output_src
+output_trg_path = args.output_trg
 
 words = []
 corrected = []
@@ -17,8 +23,9 @@ sid = eid = 0
 prev_sid = prev_eid = -1
 pos = 0
 
-with open(input_path) as input_file, open(output_src_path, 'w') as output_src_file, open(output_tgt_path,
-                                                                                         'w') as output_tgt_file:
+with open(input_path) as input_file, \
+        open(output_src_path, 'w') as output_src_file, \
+        open(output_trg_path, 'w') as output_tgt_file:
     for line in input_file:
         line = line.strip()
         if line.startswith('S'):

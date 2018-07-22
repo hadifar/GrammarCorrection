@@ -1,30 +1,38 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
+import argparse
 
-if len(sys.argv) != 4:
-    print ("[USAGE] %s lang8_file output_src output_tgt" % sys.argv[0])
-    sys.exit()
+parser = argparse.ArgumentParser()
+parser.add_argument('--input_path', type=str,
+                    help='input clean source')
+parser.add_argument('--output_src', type=str,
+                    help='input clean source')
+parser.add_argument('--output_trg', type=str,
+                    help='input clean target')
 
-input_path = sys.argv[1]
-output_src_path = sys.argv[2]
-output_tgt_path = sys.argv[3]
+args = parser.parse_args()
+
+input_path = args.input_src
+output_src_path = args.output_src
+output_trg_path = args.output_trg
 
 with open(input_path, 'r') as inputfile, \
         open(output_src_path, 'w') as outx, \
-        open(output_tgt_path, 'w') as outy:
-
+        open(output_trg_path, 'w') as outy:
     all_lines = inputfile.readlines()
 
     for line in all_lines:
         line = line.split('\t')
-        if len(line) == 5:
-            x, y = line[4], line[4]
-        elif len(line) > 5:
+        if len(line) == 6:
             x, y = line[4], line[5]
-        else:
-            continue
-
-        outx.write(x.replace('\n', '') + '\n')
-        outy.write(y.replace('\n', '') + '\n')
+            outx.write(x.replace('\n', '') + '\n')
+            outy.write(y.replace('\n', '') + '\n')
+        if len(line) == 7:
+            x, y = line[4], line[6]
+            outx.write(x.replace('\n', '') + '\n')
+            outy.write(y.replace('\n', '') + '\n')
+        if len(line) == 8:
+            x, y = line[4], line[7]
+            outx.write(x.replace('\n', '') + '\n')
+            outy.write(y.replace('\n', '') + '\n')
