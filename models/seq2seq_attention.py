@@ -94,7 +94,6 @@ def getModel(enc_seq_length, enc_vocab_size, dec_seq_length, dec_vocab_size):
     According to the "Massive Exploration of Neural Machine Translation Architectures"
     best params for NMT models (seq2seq framework) are
     encoder/decoder depths are size of 4, embedding size 512, attention dim 512
-    I use a simple model that can achieve good performance at the same time.
     """
 
     inp = Input((enc_seq_length,))

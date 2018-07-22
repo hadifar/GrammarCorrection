@@ -10,29 +10,29 @@ import config
 from utils import getSentencesMat, Vocabulary
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--text_A', type=str, help='corpus with typo (target)')
-parser.add_argument('--text_B', type=str, help='corpus without typo (source)')
+parser.add_argument('--text_A', type=str, help='source corpus')
+parser.add_argument('--text_B', type=str, help='target corpus')
 parser.add_argument('--out_file', type=str, default="./data/trg_src_prepped.h5", help='Output HDF5 file name')
 args = parser.parse_args()
 
 target_vocab = Vocabulary()
 source_vocab = Vocabulary()
 
-for trg in open(args.text_A):
-    target_vocab.add_words(trg.rstrip('\n').split(' '))
-
-for src in open(args.text_B):
+for src in open(args.text_A):
     source_vocab.add_words(src.rstrip('\n').split(' '))
+
+for trg in open(args.text_B):
+    target_vocab.add_words(trg.rstrip('\n').split(' '))
 
 target_vocab.keepTopK(config.MAX_KEEP_WORD)
 source_vocab.keepTopK(config.MAX_KEEP_WORD)
 
-target_sent_mat = getSentencesMat(args.text_A, target_vocab,
+source_sent_mat = getSentencesMat(args.text_A, target_vocab,
                                   startEndTokens=True,
                                   tokenizer_fn=lambda x: x.split(' '),
                                   maxSentenceL=config.MAX_SENT_LEN)
 
-source_sent_mat = getSentencesMat(args.text_B, source_vocab,
+target_sent_mat = getSentencesMat(args.text_B, source_vocab,
                                   startEndTokens=True,
                                   tokenizer_fn=lambda x: x.split(' '),
                                   maxSentenceL=config.MAX_SENT_LEN)

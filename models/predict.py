@@ -8,7 +8,7 @@ import h5py
 import numpy as np
 
 import config
-import model
+import seq2seq_attention
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default="./data/trg_src_prepped.h5",
@@ -20,16 +20,16 @@ parser.add_argument('--weights_path', type=str, default="./weights/KerasAttentio
 args = parser.parse_args()
 
 hf = h5py.File(args.dataset, 'r')
-
-m = model.getModel(enc_seq_length=config.MAX_SEQ_LEN,
-                   enc_vocab_size=config.MAX_VOCAB_SIZE,
-                   dec_seq_length=config.MAX_SEQ_LEN,
-                   dec_vocab_size=config.MAX_VOCAB_SIZE)
-
-m.load_weights(args.weights_path)
-
 target_vocab = json.loads(hf['target_vocab'].value)
 source_vocab = json.loads(hf['source_vocab'].value)
+
+m = seq2seq_attention.getModel(
+    enc_seq_length=config.MAX_SEQ_LEN,
+    enc_vocab_size=config.MAX_VOCAB_SIZE,
+    dec_seq_length=config.MAX_SEQ_LEN,
+    dec_vocab_size=config.MAX_VOCAB_SIZE)
+
+m.load_weights(args.weights_path)
 
 
 def predict(sent):

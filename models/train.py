@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import json
 import random
 
 import h5py
 import keras
 
 import config
-import model
+import seq2seq_attention
 
 parser = argparse.ArgumentParser()
 
@@ -26,6 +27,9 @@ inp_x = hf['target_sent_mat'][:, : config.MAX_SEQ_LEN]
 inp_cond_x = hf['source_sent_mat'][:, : config.MAX_SEQ_LEN]
 out_y = hf['source_sent_mat'][:, 1: config.MAX_SEQ_LEN + 1]
 
+target_vocab = json.loads(hf['target_vocab'].value)
+source_vocab = json.loads(hf['source_vocab'].value)
+
 tr_data = range(inp_x.shape[0])
 random.shuffle(tr_data)
 
@@ -40,10 +44,14 @@ def load_data(batchSize=config.BATCH_SIZE):
 
 tr_gen = load_data(batchSize=config.BATCH_SIZE)
 
-m = model.getModel(enc_seq_length=config.MAX_SEQ_LEN,
-                   enc_vocab_size=config.MAX_VOCAB_SIZE,
-                   dec_seq_length=config.MAX_SEQ_LEN,
-                   dec_vocab_size=config.MAX_VOCAB_SIZE)
+# word_index = dict(target_vocab['word2idx'], **source_vocab['word2idx'])
+# embedding = load_glove_matrix(word_index)
+# nb_words = len(word_index)
+m = seq2seq_attention.getModel(
+    enc_seq_length=config.MAX_SEQ_LEN,
+    enc_vocab_size=config.MAX_VOCAB_SIZE,
+    dec_seq_length=config.MAX_SEQ_LEN,
+    dec_vocab_size=config.MAX_VOCAB_SIZE)
 
 for ep in range(config.EPOCH_NUM):
     print ("Epoch", ep)
