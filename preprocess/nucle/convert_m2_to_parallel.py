@@ -13,7 +13,7 @@ parser.add_argument('--output_trg', type=str,
 
 args = parser.parse_args()
 
-input_path = args.input_src
+input_path = args.input_path
 output_src_path = args.output_src
 output_trg_path = args.output_trg
 

@@ -13,9 +13,9 @@ parser.add_argument('--input_src', type=str,
 parser.add_argument('--input_trg', type=str,
                     help='input clean target')
 parser.add_argument('--output_src', type=str,
-                    help='input clean source')
+                    help='output clean source')
 parser.add_argument('--output_trg', type=str,
-                    help='input clean target')
+                    help='output clean target')
 
 args = parser.parse_args()
 

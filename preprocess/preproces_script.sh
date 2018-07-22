@@ -41,7 +41,7 @@ mkdir -p $ROOT_DIR/data/clean-train
 $CLEAN_SCRIPTS/clean_data.py    --input_src=$ROOT_DIR/data/concat-train/concat-train.tok.src \
                             --input_trg=$ROOT_DIR/data/concat-train/concat-train.tok.trg \
                             --output_src=$ROOT_DIR/data/clean-train/clean-train.tok.src \
-                            --input_trg=$ROOT_DIR/data/clean-train/clean-train.tok.trg
+                            --output_trg=$ROOT_DIR/data/clean-train/clean-train.tok.trg
 
 # generate typo
 mkdir -p $ROOT_DIR/data/final-train
