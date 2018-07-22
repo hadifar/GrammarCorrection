@@ -99,13 +99,13 @@ def getModel(enc_seq_length, enc_vocab_size, dec_seq_length, dec_vocab_size):
     inp = Input((enc_seq_length,))
     imp_x = Embedding(enc_vocab_size, 150)(inp)
     ctxmat0 = Bidirectional(LSTM(256, return_sequences=True))(imp_x)
-    ctxmat1 = Bidirectional(LSTM(256, return_sequences=True))(ctxmat0)
+    # ctxmat1 = Bidirectional(LSTM(256, return_sequences=True))(ctxmat0)
 
     inp_cond = Input((dec_seq_length,))
     inp_cond_x = Embedding(dec_vocab_size, 150)(inp_cond)
     inp_cxt = Bidirectional(LSTM(256, return_sequences=True))(inp_cond_x)
 
-    decoded = AttentionDecoder(LSTMCell(256))([inp_cxt, ctxmat1])
+    decoded = AttentionDecoder(LSTMCell(256))([inp_cxt, ctxmat0])
 
     decoded = TimeDistributed(Dense(dec_vocab_size, activation='softmax'))(decoded)
 
