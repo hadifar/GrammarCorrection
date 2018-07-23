@@ -1,6 +1,6 @@
-# Grammar correction with Neural network
+# Grammar correction with neural network
 
-Using Seq2Seq wiht Attention Mechanism for Grammar Correction in Keras.
+Seq2Seq (Encoder-Decoder) wiht Attention Mechanism for Grammar Correction in Keras.
 
 # How to use
 
