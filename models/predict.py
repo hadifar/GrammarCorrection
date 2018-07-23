@@ -68,6 +68,7 @@ def predict(sent):
 while True:
     print ("Enter a sentence to correct typo: ")
     sent = raw_input()
+    print ('your input: ' + sent)
     print (predict(sent).encode('utf-8'))
 
     print ("===============")
