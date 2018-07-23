@@ -19,7 +19,7 @@ Seq2Seq (Encoder-Decoder) wiht Attention Mechanism for Grammar Correction in Ker
 - Look into the riminder.ipynb in root directory (make sure put dataset in your google drive).
 
 
-###TODO:
+# TODO:
   - Use fasttext because it has information about the underlying morphology of words and was empirically found to perform better than initializing
   the network randomly or using word2vec.
   
