@@ -7,9 +7,9 @@ MAX_KEEP_WORD = 70000
 MAX_VOCAB_SIZE = 70005
 
 BATCH_SIZE = 64
-EPOCH_NUM = 20
+EPOCH_NUM = 10
 STEPS_PER_EPOCH = 1000
 
 WORD_EMBEDDING_DIM = 300
 EMBEDDING_CACHE = '/Users/mac/PycharmProjects/riminder/data/embedding/embedding_matrix.npy'
-EMBEDDING_FILE = '/Users/mac/PycharmProjects/ensemble/embedding/glove.42B.300d.txt'
+EMBEDDING_FILE = '/Users/mac/PycharmProjects/ensemble/embedding/fasttext.300d.txt'
