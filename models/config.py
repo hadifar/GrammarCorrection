@@ -7,8 +7,8 @@ MAX_KEEP_WORD = 70000
 MAX_VOCAB_SIZE = 70005
 
 BATCH_SIZE = 64
-EPOCH_NUM = 25
-STEPS_PER_EPOCH = 1500
+EPOCH_NUM = 20
+STEPS_PER_EPOCH = 1000
 
 WORD_EMBEDDING_DIM = 300
 EMBEDDING_CACHE = '/Users/mac/PycharmProjects/riminder/data/embedding/embedding_matrix.npy'
