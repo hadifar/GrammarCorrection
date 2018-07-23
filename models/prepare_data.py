@@ -7,7 +7,7 @@ import json
 import h5py
 
 import config
-from utils import getSentencesMat, Vocabulary
+from general_helper import getSentencesMat, Vocabulary
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--text_A', type=str, help='source corpus')

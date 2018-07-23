@@ -16,7 +16,7 @@ $ROOT_DIR/models/prepare_data.py --text_A=$ROOT_DIR/data/final-train/final-train
                                 --out_file=$ROOT_DIR/data/trg_src_prepped.h5
 
 
-mkdir -p $ROOT_DIR/train/weights
+mkdir -p $ROOT_DIR/models/weights
 $ROOT_DIR/models/train.py --dataset=$ROOT_DIR/data/trg_src_prepped.h5 \
                         --weights_path=$ROOT_DIR/train/weights/KerasAttentionNMT.h5
 
