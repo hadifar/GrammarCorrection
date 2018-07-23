@@ -1,8 +1,22 @@
 # Grammar correction with Neural network
 
-Using Neural Machine Translation for Grammar Correction.
+Using Seq2Seq wiht Attention Mechanism for Grammar Correction in Keras.
 
-Description comming soon :)
+# How to use
+
+- git clone https://github.com/hadifar/GrammarCorrection.git
+- cd GrammarCorrection
+- mkdir data
+- Download [lang8](https://sites.google.com/site/naistlang8corpora/) and [NUCLE](http://www.comp.nus.edu.sg/~nlp/corpora.html) and put them in data folder.
+- cd preprocess
+- sh preprocess_script.sh
+- cd ..
+- cd models
+- sh train_script.sh
+- That's all :)
+
+# How to use in Colab
+- Look into the riminder.ipynb in root directory (make sure put dataset in your google drive).
 
 
 ###TODO:
