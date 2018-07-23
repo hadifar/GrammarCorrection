@@ -16,7 +16,7 @@ Seq2Seq (Encoder-Decoder) wiht Attention Mechanism for Grammar Correction in Ker
 - That's all :)
 
 # How to use in Colab
-- Look into the riminder.ipynb in root directory (make sure put dataset in your google drive).
+- Look into the [riminder.ipynb](https://github.com/hadifar/GrammarCorrection/blob/master/riminder.ipynb) in the root directory. (do not forget to put the dataset in your google drive).
 
 
 # TODO:
