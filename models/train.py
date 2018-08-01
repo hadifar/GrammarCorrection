@@ -23,7 +23,7 @@ args = parser.parse_args()
 inp_x = np.load(open(args.cache_dir + config.CACHE_SOURCE, 'rb'))
 inp_cond_x = np.load(open(args.cache_dir + config.CACHE_TARGET, 'rb'))
 out_y = inp_cond_x[:, 1: config.MAX_SEQ_LEN + 1]  # encoder is one token ahead
-out_y = np.pad(out_y, (1, 0), 'constant', constant_values=0)  # add pad for missing index
+out_y = np.pad(out_y, ((0, 0), (0, 1)), mode='constant')  # add pad for missing index
 
 nb_samples = inp_x.shape[0]
 tr_data = range(nb_samples)
@@ -46,11 +46,14 @@ tr_gen = load_data(batchSize=config.BATCH_SIZE)
 # nb_words = len(word_index)
 
 model = seq2seq_attention.getModel()
+model.fit([inp_x, inp_cond_x], keras.utils.to_categorical(out_y, num_classes=config.MAX_VOCAB_SIZE),
+          batch_size=config.BATCH_SIZE, epochs=config.EPOCH_NUM)
+model.save_weights(args.weights_path)
 
-for ep in range(config.EPOCH_NUM):
-    print ("Epoch", ep)
-    model.fit_generator(tr_gen, steps_per_epoch=step_per_epoch, epochs=1)
-    model.save_weights(args.weights_path + "." + str(ep))
-    model.save_weights(args.weights_path)
+# for ep in range(config.EPOCH_NUM):
+#     print ("Epoch", ep)
+#     model.fit_generator(tr_gen, steps_per_epoch=step_per_epoch, epochs=1)
+#     model.save_weights(args.weights_path + "." + str(ep))
+#     model.save_weights(args.weights_path)
 
 print ("Training is finished")

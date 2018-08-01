@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from keras.layers import *
 from keras.models import *
 
@@ -116,7 +117,7 @@ def getModel():
     decoded = TimeDistributed(Dense(dec_vocab_size, activation='softmax'))(decoded)
 
     model = Model([inp, inp_cond], decoded)
-    model.compile('adam', 'categorical_crossentropy')
+    model.compile('nadam', 'categorical_crossentropy')
     print(model.summary())
 
     return model

@@ -18,11 +18,11 @@ args = parser.parse_args()
 
 def tokenize_helper(text):
     text = text.replace('\n', '')
-    return '<start> ' + text + ' <end>'
+    return '<START> ' + text + ' <END>'
 
 
 with open(args.text_A) as text_a, open(args.text_B) as text_b:
-    tokenizer = Tokenizer(num_words=config.MAX_VOCAB_SIZE, filters='', oov_token='<unk>')
+    tokenizer = Tokenizer(num_words=config.MAX_VOCAB_SIZE, filters='', oov_token='<UNK>')
 
     all_text_a = []
     all_text_b = []
@@ -30,10 +30,6 @@ with open(args.text_A) as text_a, open(args.text_B) as text_b:
         all_text_a.append(tokenize_helper(line))
     for line in text_b:
         all_text_b.append(tokenize_helper(line))
-
-    # todo: change this
-    all_text_a = all_text_a[0:10000]
-    all_text_b = all_text_b[0:10000]
 
     tokenizer.fit_on_texts(all_text_a + all_text_b)
     word_index = tokenizer.word_index

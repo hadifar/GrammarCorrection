@@ -5,7 +5,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input_path', required=True,
-                    help='input clean source')
+                    help='input path')
 parser.add_argument('--output_src', required=True,
                     help='output clean source')
 parser.add_argument('--output_trg', required=True,
