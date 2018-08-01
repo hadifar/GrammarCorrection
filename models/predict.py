@@ -16,10 +16,7 @@ parser.add_argument('--weights_path', default="../models/weights/KerasAttentionN
                     help='Path to Weights checkpoint')
 
 args = parser.parse_args()
-#
-# hf = h5py.File(args.dataset, 'r')
-# target_vocab = json.loads(hf['target_vocab'].value)
-# source_vocab = json.loads(hf['source_vocab'].value)
+
 word_index = np.load(open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb'))
 word_index = word_index.flatten()[0]
 index_word = dict([(value, key) for (key, value) in word_index.items()])
@@ -66,4 +63,5 @@ while True:
     print ("Enter a sentence to correct typo: ")
     sent = raw_input()
     print ('your input: ' + sent)
-    print (predict(sent).encode('utf-8'))
+    print (predict(sent))
+    print(20 * '-')

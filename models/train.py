@@ -46,14 +46,15 @@ tr_gen = load_data(batchSize=config.BATCH_SIZE)
 # nb_words = len(word_index)
 
 model = seq2seq_attention.getModel()
-model.fit([inp_x, inp_cond_x], keras.utils.to_categorical(out_y, num_classes=config.MAX_VOCAB_SIZE),
-          batch_size=config.BATCH_SIZE, epochs=config.EPOCH_NUM)
-model.save_weights(args.weights_path)
 
-# for ep in range(config.EPOCH_NUM):
-#     print ("Epoch", ep)
-#     model.fit_generator(tr_gen, steps_per_epoch=step_per_epoch, epochs=1)
-#     model.save_weights(args.weights_path + "." + str(ep))
-#     model.save_weights(args.weights_path)
+# model.fit([inp_x, inp_cond_x], keras.utils.to_categorical(out_y, num_classes=config.MAX_VOCAB_SIZE),
+#           batch_size=config.BATCH_SIZE, epochs=config.EPOCH_NUM)
+# model.save_weights(args.weights_path)
+
+for ep in range(config.EPOCH_NUM):
+    print ("Epoch", ep)
+    model.fit_generator(tr_gen, steps_per_epoch=step_per_epoch)
+    model.save_weights(args.weights_path + "." + str(ep))
+    model.save_weights(args.weights_path)
 
 print ("Training is finished")
