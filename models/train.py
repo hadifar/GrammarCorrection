@@ -2,36 +2,33 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import json
 import random
 
-import h5py
 import keras
+import numpy as np
 
 import config
 import seq2seq_attention
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--dataset', type=str, default="./data/trg_src_prepped.h5",
-                    help='Path to HDF5 file')
+parser.add_argument('--cache_dir', required=True, default="../data/",
+                    help='Path to cache files')
 
-parser.add_argument('--weights_path', type=str, default="./weights/KerasAttentionNMT.h5",
+parser.add_argument('--weights_path', required=True, default="../models/weights/KerasAttentionNMT.h5",
                     help='Path to Weights checkpoint')
 
 args = parser.parse_args()
 
-hf = h5py.File(args.dataset, 'r')
+inp_x = np.load(open(args.cache_dir + config.CACHE_SOURCE, 'rb'))
+inp_cond_x = np.load(open(args.cache_dir + config.CACHE_TARGET, 'rb'))
+out_y = inp_cond_x[:, 1: config.MAX_SEQ_LEN + 1]  # encoder is one token ahead
+out_y = np.pad(out_y, (1, 0), 'constant', constant_values=0)  # add pad for missing index
 
-inp_x = hf['source_sent_mat'][:, : config.MAX_SEQ_LEN]
-inp_cond_x = hf['target_sent_mat'][:, : config.MAX_SEQ_LEN]
-out_y = hf['target_sent_mat'][:, 1: config.MAX_SEQ_LEN + 1]
-
-source_vocab = json.loads(hf['source_vocab'].value)
-target_vocab = json.loads(hf['target_vocab'].value)
-
-tr_data = range(inp_x.shape[0])
+nb_samples = inp_x.shape[0]
+tr_data = range(nb_samples)
 random.shuffle(tr_data)
+step_per_epoch = nb_samples / config.BATCH_SIZE
 
 
 def load_data(batchSize=config.BATCH_SIZE):
@@ -48,16 +45,12 @@ tr_gen = load_data(batchSize=config.BATCH_SIZE)
 # embedding = load_glove_matrix(word_index)
 # nb_words = len(word_index)
 
-m = seq2seq_attention.getModel(
-    enc_seq_length=config.MAX_SEQ_LEN,
-    enc_vocab_size=config.MAX_VOCAB_SIZE,
-    dec_seq_length=config.MAX_SEQ_LEN,
-    dec_vocab_size=config.MAX_VOCAB_SIZE)
+model = seq2seq_attention.getModel()
 
 for ep in range(config.EPOCH_NUM):
     print ("Epoch", ep)
-    m.fit_generator(tr_gen, steps_per_epoch=config.STEPS_PER_EPOCH)
-    m.save_weights(args.weights_path + "." + str(ep))
-    m.save_weights(args.weights_path)
+    model.fit_generator(tr_gen, steps_per_epoch=step_per_epoch, epochs=1)
+    model.save_weights(args.weights_path + "." + str(ep))
+    model.save_weights(args.weights_path)
 
 print ("Training is finished")

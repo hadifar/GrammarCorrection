@@ -96,3 +96,4 @@ fabric.properties
 .idea/
 
 data/
+models/weights

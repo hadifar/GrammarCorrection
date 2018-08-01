@@ -11,37 +11,35 @@ import config
 import seq2seq_attention
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default="./data/trg_src_prepped.h5",
-                    help='Path to HDF5 file')
+parser.add_argument('--cache_dir', type=str, default="../data/",
+                    help='Path to cache files')
 
-parser.add_argument('--weights_path', type=str, default="./weights/KerasAttentionNMT.h5",
+parser.add_argument('--weights_path', type=str, default="../models/weights/KerasAttentionNMT.h5",
                     help='Path to Weights checkpoint')
 
 args = parser.parse_args()
+#
+# hf = h5py.File(args.dataset, 'r')
+# target_vocab = json.loads(hf['target_vocab'].value)
+# source_vocab = json.loads(hf['source_vocab'].value)
+word_index = np.load(open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb'))
+word_index = word_index.flatten()[0]
 
-hf = h5py.File(args.dataset, 'r')
-target_vocab = json.loads(hf['target_vocab'].value)
-source_vocab = json.loads(hf['source_vocab'].value)
+model = seq2seq_attention.getModel()
 
-m = seq2seq_attention.getModel(
-    enc_seq_length=config.MAX_SEQ_LEN,
-    enc_vocab_size=config.MAX_VOCAB_SIZE,
-    dec_seq_length=config.MAX_SEQ_LEN,
-    dec_vocab_size=config.MAX_VOCAB_SIZE)
-
-m.load_weights(args.weights_path)
+model.load_weights(args.weights_path)
 
 
-def predict(sent):
-    words = sent.split(' ')
+def predict(sentence):
+    words = sentence.split(' ')
     words = ['<start>'] + words + ['<end>']
     words_id = []
 
     for w in words:
-        if w in target_vocab['word2idx']:
-            words_id.append(target_vocab['word2idx'][w])
+        if w in word_index:
+            words_id.append(word_index[w])
         else:
-            words_id.append(target_vocab['word2idx']['<unk>'])
+            words_id.append(word_index['<unk>'])
     words = words_id
 
     ret = ""
@@ -50,16 +48,16 @@ def predict(sent):
 
     for i, w in enumerate(words):
         m_input[0][0, i] = w
-    m_input[1][0, 0] = source_vocab['word2idx']['<start>']
+    m_input[1][0, 0] = word_index['<start>']
 
     for w_i in range(1, config.MAX_SEQ_LEN):
-        out = m.predict(m_input)
+        out = model.predict(m_input)
         out_w_i = out[0][w_i - 1].argmax()
 
         if out_w_i == 0:
             continue
 
-        ret += source_vocab['idx2word'][str(out_w_i)] + " "
+        ret += word_index[str(out_w_i)] + " "
         m_input[1][0, w_i] = out_w_i
 
     return ret
