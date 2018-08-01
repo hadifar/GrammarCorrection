@@ -1,15 +1,22 @@
 # #!/usr/bin/env python
 # # -*- coding: utf-8 -*-
 
-MAX_SEQ_LEN = 35
-MAX_SENT_LEN = 100
-MAX_KEEP_WORD = 70000
-MAX_VOCAB_SIZE = 70005
+ROOT_DIR = '/Users/mac/PycharmProjects/riminder/'
+DATA_DIR = ROOT_DIR + 'data/'
 
-BATCH_SIZE = 64
-EPOCH_NUM = 40
-STEPS_PER_EPOCH = 15000
+CORPUS_SOURCE = DATA_DIR + 'final-train.tok.src'
+CORPUS_TARGET = DATA_DIR + 'final-train.tok.trg'
+
+CACHE_SOURCE = 'cache_source.npy'
+CACHE_TARGET = 'cache_target.npy'
+CACHE_WORD_INDEX = 'cache_word_index.npy'
+
+MAX_SEQ_LEN = 40
+MAX_VOCAB_SIZE = 60000
+
+BATCH_SIZE = 32
+EPOCH_NUM = 200
 
 WORD_EMBEDDING_DIM = 300
-EMBEDDING_CACHE = '/Users/mac/PycharmProjects/riminder/data/embedding/embedding_matrix.npy'
+EMBEDDING_CACHE = DATA_DIR + '/embedding/embedding_matrix.npy'
 EMBEDDING_FILE = '/Users/mac/PycharmProjects/ensemble/embedding/fasttext.300d.txt'

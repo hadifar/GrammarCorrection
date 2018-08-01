@@ -28,7 +28,7 @@ output_path_src = args.output_src
 output_path_trg = args.output_trg
 
 # todo: replace most common misspelling
-# todo: try to do it in automatic way ! for now I just add some samples
+# todo: try to do it in automatic way! for now I just added some random samples
 # https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings
 # https://en.wikipedia.org/wiki/Commonly_misspelled_English_words#A%E2%80%93B
 MISSPELLING_TOKEN = {'absence': 'absense', 'acceptable': 'acceptible',

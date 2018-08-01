@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from keras.layers import *
 from keras.models import *
+
+from models import config
 
 
 class AttentionDecoder(Layer):
@@ -89,28 +92,32 @@ class AttentionDecoder(Layer):
         return input_shape[0][0], input_shape[0][1], self.output_dim
 
 
-def getModel(enc_seq_length, enc_vocab_size, dec_seq_length, dec_vocab_size):
+def getModel():
     """
     According to the "Massive Exploration of Neural Machine Translation Architectures"
     best params for NMT models (seq2seq framework) are
     encoder/decoder depths are size of 4, embedding size 512, attention dim 512
     """
+    enc_seq_length = config.MAX_SEQ_LEN
+    enc_vocab_size = config.MAX_VOCAB_SIZE
+    dec_seq_length = config.MAX_SEQ_LEN
+    dec_vocab_size = config.MAX_VOCAB_SIZE
 
     inp = Input((enc_seq_length,))
-    imp_x = Embedding(enc_vocab_size, 150)(inp)
-    ctxmat0 = Bidirectional(LSTM(256, return_sequences=True))(imp_x)
+    imp_x = Embedding(enc_vocab_size, 100)(inp)
+    ctxmat0 = Bidirectional(LSTM(100, return_sequences=True))(imp_x)
     # ctxmat1 = Bidirectional(LSTM(256, return_sequences=True))(ctxmat0)
 
     inp_cond = Input((dec_seq_length,))
-    inp_cond_x = Embedding(dec_vocab_size, 150)(inp_cond)
-    inp_cxt = Bidirectional(LSTM(256, return_sequences=True))(inp_cond_x)
+    inp_cond_x = Embedding(dec_vocab_size, 100)(inp_cond)
+    inp_cxt = Bidirectional(LSTM(100, return_sequences=True))(inp_cond_x)
 
-    decoded = AttentionDecoder(LSTMCell(256))([inp_cxt, ctxmat0])
+    decoded = AttentionDecoder(LSTMCell(100))([inp_cxt, ctxmat0])
 
     decoded = TimeDistributed(Dense(dec_vocab_size, activation='softmax'))(decoded)
 
     model = Model([inp, inp_cond], decoded)
-    model.compile('adam', 'categorical_crossentropy')
+    model.compile('nadam', 'categorical_crossentropy')
     print(model.summary())
 
     return model

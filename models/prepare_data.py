@@ -2,47 +2,44 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import json
 
-import h5py
+import numpy as np
+from keras_preprocessing.text import Tokenizer
+from tensorflow import keras
 
 import config
-from general_helper import getSentencesMat, Vocabulary
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--text_A', type=str, help='source corpus')
-parser.add_argument('--text_B', type=str, help='target corpus')
-parser.add_argument('--out_file', type=str, default="./data/trg_src_prepped.h5", help='Output HDF5 file name')
+parser.add_argument('--text_A', default='../data/final-train/final-train.tok.src', help='source corpus', required=True)
+parser.add_argument('--text_B', default='../data/final-train/final-train.tok.trg', help='target corpus', required=True)
+parser.add_argument('--cache_dir', default='../data/', help='output directory to save caches', required=True)
 args = parser.parse_args()
 
-source_vocab = Vocabulary()
-target_vocab = Vocabulary()
 
-for src in open(args.text_A):
-    source_vocab.add_words(src.rstrip('\n').split(' '))
+def tokenize_helper(text):
+    text = text.replace('\n', '')
+    return '<START> ' + text + ' <END>'
 
-for trg in open(args.text_B):
-    target_vocab.add_words(trg.rstrip('\n').split(' '))
 
-source_vocab.keepTopK(config.MAX_KEEP_WORD)
-target_vocab.keepTopK(config.MAX_KEEP_WORD)
+with open(args.text_A) as text_a, open(args.text_B) as text_b:
+    tokenizer = Tokenizer(num_words=config.MAX_VOCAB_SIZE, filters='', oov_token='<UNK>')
 
-source_sent_mat = getSentencesMat(args.text_A, target_vocab,
-                                  startEndTokens=True,
-                                  tokenizer_fn=lambda x: x.split(' '),
-                                  maxSentenceL=config.MAX_SENT_LEN)
+    all_text_a = []
+    all_text_b = []
+    for line in text_a:
+        all_text_a.append(tokenize_helper(line))
+    for line in text_b:
+        all_text_b.append(tokenize_helper(line))
 
-target_sent_mat = getSentencesMat(args.text_B, source_vocab,
-                                  startEndTokens=True,
-                                  tokenizer_fn=lambda x: x.split(' '),
-                                  maxSentenceL=config.MAX_SENT_LEN)
+    tokenizer.fit_on_texts(all_text_a + all_text_b)
+    word_index = tokenizer.word_index
 
-f = h5py.File(args.out_file, "w")
+    source = tokenizer.texts_to_sequences(all_text_a)
+    source = keras.preprocessing.sequence.pad_sequences(source, maxlen=config.MAX_SEQ_LEN, padding='post')
 
-f.create_dataset("source_vocab", data=json.dumps(source_vocab.getDicts()))
-f.create_dataset("target_vocab", data=json.dumps(target_vocab.getDicts()))
+    target = tokenizer.texts_to_sequences(all_text_b)
+    target = keras.preprocessing.sequence.pad_sequences(target, maxlen=config.MAX_SEQ_LEN, padding='post')
 
-f.create_dataset('source_sent_mat', data=source_sent_mat)
-f.create_dataset('target_sent_mat', data=target_sent_mat)
-
-f.close()
+    np.save(open(args.cache_dir + config.CACHE_SOURCE, 'wb'), source)
+    np.save(open(args.cache_dir + config.CACHE_TARGET, 'wb'), target)
+    np.save(open(args.cache_dir + config.CACHE_WORD_INDEX, 'wb'), word_index)
