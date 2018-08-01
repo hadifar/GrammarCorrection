@@ -4,12 +4,12 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_path', type=str,
+parser.add_argument('--input_path', required=True,
                     help='input clean source')
-parser.add_argument('--output_src', type=str,
-                    help='input clean source')
-parser.add_argument('--output_trg', type=str,
-                    help='input clean target')
+parser.add_argument('--output_src', required=True,
+                    help='output clean source')
+parser.add_argument('--output_trg', required=True,
+                    help='output clean target')
 
 args = parser.parse_args()
 

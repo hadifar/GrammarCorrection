@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import argparse
 import re
 import string
-import argparse
 
 import nltk
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_src', type=str,
+parser.add_argument('--input_src', required=True,
                     help='input clean source')
-parser.add_argument('--input_trg', type=str,
+parser.add_argument('--input_trg', required=True,
                     help='input clean target')
-parser.add_argument('--output_src', type=str,
+parser.add_argument('--output_src', required=True,
                     help='output clean source')
-parser.add_argument('--output_trg', type=str,
+parser.add_argument('--output_trg', required=True,
                     help='output clean target')
 
 args = parser.parse_args()
@@ -25,12 +25,6 @@ output_path_src = args.output_src
 output_path_trg = args.output_trg
 
 DELETE_PUNCTUATION = set(string.punctuation) - {'.', ',', '-'}
-
-
-# https://stackoverflow.com/a/30212799/1462770
-def fullmatch(regex, string, flags=0):
-    """Emulate python-3.4 re.fullmatch()."""
-    return re.match("(?:" + regex + r")\Z", string, flags=flags)
 
 
 def reduce_lengthening(text):

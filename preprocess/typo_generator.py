@@ -10,15 +10,15 @@ import nltk
 from pattern.en import pluralize, singularize, lexeme
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_src', type=str,
+parser.add_argument('--input_src', required=True,
                     help='input clean source')
-parser.add_argument('--input_trg', type=str,
+parser.add_argument('--input_trg', required=True,
                     help='input clean target')
 
-parser.add_argument('--output_src', type=str,
-                    help='input clean source')
-parser.add_argument('--output_trg', type=str,
-                    help='input clean target')
+parser.add_argument('--output_src', required=True,
+                    help='output clean source')
+parser.add_argument('--output_trg', required=True,
+                    help='output clean target')
 
 args = parser.parse_args()
 

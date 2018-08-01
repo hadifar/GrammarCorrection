@@ -22,8 +22,13 @@ In training step, I used famous seq2seq Attention model [here](https://arxiv.org
 
 - git clone https://github.com/hadifar/GrammarCorrection.git
 - cd GrammarCorrection
+- virtualenv venv
+- source venv/bin/activate
+- sudo pip2 install -r requirements.txt
 - mkdir data
+- cd data
 - Download [lang8](https://sites.google.com/site/naistlang8corpora/) and [NUCLE](http://www.comp.nus.edu.sg/~nlp/corpora.html) and put them in data folder.
+- cd ..
 - cd preprocess
 - sh preprocess_script.sh
 - cd ..
@@ -38,7 +43,6 @@ In training step, I used famous seq2seq Attention model [here](https://arxiv.org
 # TODO:
   - Use fasttext because it has information about the underlying morphology of words and was empirically found to perform better than initializing
   the network randomly or using word2vec.
-  
   - Use character ngram feature
   - Use language model for checking final output
   - Use Keras Tokenizer and sequence padding
