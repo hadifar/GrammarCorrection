@@ -1,7 +1,7 @@
 # #!/usr/bin/env python
 # # -*- coding: utf-8 -*-
 
-ROOT_DIR = '/Users/mac/PycharmProjects/riminder/'
+ROOT_DIR = '/Users/mac/PycharmProjects/GrammarCorrection/'
 DATA_DIR = ROOT_DIR + 'data/'
 
 CORPUS_SOURCE = DATA_DIR + 'final-train.tok.src'
@@ -17,6 +17,7 @@ MAX_VOCAB_SIZE = 60000
 BATCH_SIZE = 32
 EPOCH_NUM = 200
 
+USE_WORD_VECTOR = True
 WORD_EMBEDDING_DIM = 300
-EMBEDDING_CACHE = DATA_DIR + '/embedding/embedding_matrix.npy'
-EMBEDDING_FILE = '/Users/mac/PycharmProjects/ensemble/embedding/fasttext.300d.txt'
+EMBEDDING_CACHE = DATA_DIR + 'embedding/embedding_matrix.npy'
+EMBEDDING_FILE = DATA_DIR + 'embedding/wiki.en.vec'

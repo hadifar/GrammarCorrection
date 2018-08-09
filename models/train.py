@@ -9,6 +9,7 @@ import numpy as np
 
 import config
 import seq2seq_attention
+from models import general_helper
 
 parser = argparse.ArgumentParser()
 
@@ -42,8 +43,10 @@ def load_data(batchSize=config.BATCH_SIZE):
 tr_gen = load_data(batchSize=config.BATCH_SIZE)
 
 # word_index = dict(target_vocab['word2idx'], **source_vocab['word2idx'])
-# embedding = load_glove_matrix(word_index)
-# nb_words = len(word_index)
+word_index = np.load(open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb'))
+embedding = general_helper.load_embedding_matrix(word_index)
+nb_words = len(word_index)
+
 
 model = seq2seq_attention.getModel()
 

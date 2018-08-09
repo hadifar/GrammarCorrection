@@ -4,5 +4,5 @@ h5py
 numpy
 tensorflow
 keras
-
+gensim
 

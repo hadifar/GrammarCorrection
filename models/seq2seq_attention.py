@@ -5,7 +5,7 @@
 from keras.layers import *
 from keras.models import *
 
-from models import config
+from models import config, general_helper
 
 
 class AttentionDecoder(Layer):
