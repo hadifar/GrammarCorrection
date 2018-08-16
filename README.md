@@ -41,7 +41,5 @@ In training step, I used famous seq2seq Attention model [here](https://arxiv.org
 
 
 # TODO:
-  - Use fasttext because it has information about the underlying morphology of words and was empirically found to perform better than initializing
-  the network randomly or using word2vec.
   - Use character ngram feature
   - Use language model for checking final output
