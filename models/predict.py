@@ -7,6 +7,7 @@ import numpy as np
 
 import config
 import seq2seq_attention
+from models import general_helper
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cache_dir', default="../data/",
@@ -17,11 +18,11 @@ parser.add_argument('--weights_path', default="../models/weights/KerasAttentionN
 
 args = parser.parse_args()
 
-word_index = np.load(open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb'))
-word_index = word_index.flatten()[0]
-index_word = dict([(value, key) for (key, value) in word_index.items()])
+with open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb') as npy:
+    word_index = np.load(npy).item()
+    embedding = general_helper.load_embedding_matrix(word_index)
 
-model = seq2seq_attention.getModel()
+model = seq2seq_attention.getModel(word_index)
 
 model.load_weights(args.weights_path)
 

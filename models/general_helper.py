@@ -55,7 +55,7 @@ def load_embedding_matrix(word_index):
     word2vec = KeyedVectors.load_word2vec_format(config.EMBEDDING_FILE)
     print('Found %s word vectors of word2vec' % len(word2vec.vocab))
 
-    nb_words = min(config.MAX_VOCAB_SIZE, len(word_index)) + 1
+    nb_words = len(word_index)
 
     embedding_matrix = np.zeros((nb_words, 300))
     for word, i in word_index.items():

@@ -12,7 +12,7 @@ CACHE_TARGET = 'cache_target.npy'
 CACHE_WORD_INDEX = 'cache_word_index.npy'
 
 MAX_SEQ_LEN = 40
-MAX_VOCAB_SIZE = 60000
+MAX_VOCAB_SIZE = 60000  # recommended
 
 BATCH_SIZE = 32
 EPOCH_NUM = 200

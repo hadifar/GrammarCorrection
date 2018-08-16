@@ -42,13 +42,11 @@ def load_data(batchSize=config.BATCH_SIZE):
 
 tr_gen = load_data(batchSize=config.BATCH_SIZE)
 
-# word_index = dict(target_vocab['word2idx'], **source_vocab['word2idx'])
-word_index = np.load(open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb'))
-embedding = general_helper.load_embedding_matrix(word_index)
-nb_words = len(word_index)
+with open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb') as npy:
+    word_index = np.load(npy).item()
+    embedding = general_helper.load_embedding_matrix(word_index)
 
-
-model = seq2seq_attention.getModel()
+model = seq2seq_attention.getModel(embedding, word_index)
 
 # model.fit([inp_x, inp_cond_x], keras.utils.to_categorical(out_y, num_classes=config.MAX_VOCAB_SIZE),
 #           batch_size=config.BATCH_SIZE, epochs=config.EPOCH_NUM)
