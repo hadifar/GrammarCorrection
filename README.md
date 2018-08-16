@@ -33,6 +33,7 @@ In training step, I used famous seq2seq Attention model [here](https://arxiv.org
 - sh preprocess_script.sh
 - cd ..
 - cd models
+- donwnload fasttext pretrained embeddings and put it in *data/embedding* folder
 - sh train_script.sh
 - That's all :)
 
