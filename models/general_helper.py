@@ -55,10 +55,12 @@ def load_embedding_matrix(word_index):
     word2vec = KeyedVectors.load_word2vec_format(config.EMBEDDING_FILE)
     print('Found %s word vectors of word2vec' % len(word2vec.vocab))
 
-    nb_words = len(word_index)
+    nb_words = min(config.MAX_VOCAB_SIZE, len(word_index)) + 1
 
-    embedding_matrix = np.zeros((nb_words, 300))
+    embedding_matrix = np.zeros((nb_words, config.WORD_EMBEDDING_DIM))
     for word, i in word_index.items():
+        if i >= nb_words:
+            continue
         if word in word2vec.vocab:
             embedding_matrix[i] = word2vec.word_vec(word)
     print('Null word embeddings: %d' % np.sum(np.sum(embedding_matrix, axis=1) == 0))

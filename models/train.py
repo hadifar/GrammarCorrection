@@ -26,6 +26,10 @@ inp_cond_x = np.load(open(args.cache_dir + config.CACHE_TARGET, 'rb'))
 out_y = inp_cond_x[:, 1: config.MAX_SEQ_LEN + 1]  # encoder is one token ahead
 out_y = np.pad(out_y, ((0, 0), (0, 1)), mode='constant')  # add pad for missing index
 
+word_index = np.load(open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb')).item()
+embedding = general_helper.load_embedding_matrix(word_index)
+nb_words = min(len(word_index), config.MAX_VOCAB_SIZE) + 1
+
 nb_samples = inp_x.shape[0]
 tr_data = range(nb_samples)
 random.shuffle(tr_data)
@@ -37,14 +41,10 @@ def load_data(batchSize=config.BATCH_SIZE):
         for i in range(0, len(tr_data) - batchSize, batchSize):
             inds = tr_data[i: i + batchSize]
             yield [inp_x[inds], inp_cond_x[inds]], keras.utils.to_categorical(out_y[inds],
-                                                                              num_classes=config.MAX_VOCAB_SIZE)
+                                                                              num_classes=nb_words)
 
 
 tr_gen = load_data(batchSize=config.BATCH_SIZE)
-
-with open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb') as npy:
-    word_index = np.load(npy).item()
-    embedding = general_helper.load_embedding_matrix(word_index)
 
 model = seq2seq_attention.getModel(embedding, word_index)
 

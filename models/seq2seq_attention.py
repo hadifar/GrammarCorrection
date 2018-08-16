@@ -100,17 +100,18 @@ def getModel(embedding, word_index):
     """
 
     enc_seq_length = config.MAX_SEQ_LEN
-    enc_vocab_size = len(word_index)
+    enc_vocab_size = min(len(word_index), config.MAX_VOCAB_SIZE) + 1
     dec_seq_length = config.MAX_SEQ_LEN
-    dec_vocab_size = len(word_index)
+    dec_vocab_size = min(len(word_index), config.MAX_VOCAB_SIZE) + 1
 
     inp = Input((enc_seq_length,))
-    imp_x = Embedding(enc_vocab_size, 100, weights=[embedding])(inp)
+    imp_x = Embedding(enc_vocab_size, config.WORD_EMBEDDING_DIM, weights=[embedding], trainable=False)(inp)
+
     ctxmat0 = Bidirectional(LSTM(100, return_sequences=True))(imp_x)
-    # ctxmat1 = Bidirectional(LSTM(256, return_sequences=True))(ctxmat0)
 
     inp_cond = Input((dec_seq_length,))
-    inp_cond_x = Embedding(dec_vocab_size, 100, weights=[embedding])(inp_cond)
+    inp_cond_x = Embedding(dec_vocab_size, config.WORD_EMBEDDING_DIM, weights=[embedding], trainable=False)(inp_cond)
+
     inp_cxt = Bidirectional(LSTM(100, return_sequences=True))(inp_cond_x)
 
     decoded = AttentionDecoder(LSTMCell(100))([inp_cxt, ctxmat0])
