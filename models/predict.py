@@ -18,11 +18,12 @@ parser.add_argument('--weights_path', default="../models/weights/KerasAttentionN
 
 args = parser.parse_args()
 
-with open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb') as npy:
-    word_index = np.load(npy).item()
-    embedding = general_helper.load_embedding_matrix(word_index)
+word_index = np.load(open(args.cache_dir + config.CACHE_WORD_INDEX, 'rb'))
+embedding = general_helper.load_embedding_matrix(word_index.item())
+word_index = word_index.flatten()[0]
+index_word = dict([(value, key) for (key, value) in word_index.items()])
 
-model = seq2seq_attention.getModel(word_index)
+model = seq2seq_attention.getModel(embedding, word_index)
 
 model.load_weights(args.weights_path)
 
